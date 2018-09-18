@@ -60,7 +60,10 @@ class Downloader(object):
                     # server-side check on user-agent etc?
                     # ...think it's more stable now with those set to
                     # emulate an android device
-                    raise Exception('Failed to read video ID from data')
+                    # If we can't find the video ID in that field, check in the thumbnail URL
+                    video_id=re.findall(r'/([0-9]+)/', s['video_thumbnail_url'])[0]
+                    if video_id is None:
+                        raise Exception('Failed to read video ID from data')
 
                 s_title = s['title']
                 s_title = s_title.replace(u'\u2018', "'")  # single quote left
